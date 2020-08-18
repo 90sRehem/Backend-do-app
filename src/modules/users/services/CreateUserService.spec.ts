@@ -4,7 +4,7 @@ import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider'
 import CreateUserService from './CreateUserService'
 import AppError from '@shared/errors/AppError';
 
-describe('CreateUser', async () => {
+describe('CreateUser', () => {
     it('should be able to create a new user', async () => {
         const fakeUsersRepository = new FakeUsersRepository()
         const fakeHashProvider = new FakeHashProvider()
