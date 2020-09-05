@@ -1,5 +1,5 @@
 import { injectable, inject } from 'tsyringe'
-import {isAfter, addHours} from 'date-fns'
+import { isAfter, addHours } from 'date-fns'
 
 import AppError from '@shared/errors/AppError'
 import IUsersRepository from '@modules/users/repositories/IUsersRepository'
@@ -16,7 +16,7 @@ class ResetPasswordService {
     constructor(
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
-    
+
         @inject('UserTokensRepository')
         private userTokensRepository: IUserTokensRepository,
 
@@ -25,28 +25,30 @@ class ResetPasswordService {
     ) { }
 
     public async execute({ token, password }: IRequest): Promise<void> {
-       const userToken = await this.userTokensRepository.findByToken(token)
-       
-       if(!userToken){
-        throw new AppError('User token does not exists')
-       }
+        const userToken = await this.userTokensRepository.findByToken(token)
 
-       const user = await this.usersRepository.findById(userToken.user_id)
+        if (!userToken) {
+            throw new AppError('User token does not exists')
+        }
 
-       if(!user) {
-           throw new AppError('User doens not exists')
-       }
+        const user = await this.usersRepository.findById(userToken.user_id)
 
-       const tokenCreatedAt = userToken.created_at
-       const compareDate = addHours(tokenCreatedAt, 2)
+        if (!user) {
+            throw new AppError('User does not exists')
+        }
 
-       if(isAfter(Date.now(), compareDate)) {
-           throw new AppError('Token expired')
-       }
+        const tokenCreatedAt = userToken.created_at
+        const compareDate = addHours(tokenCreatedAt, 2)
 
-       user.password = await this.hashProvider.generateHash(password)
+        if (isAfter(Date.now(), compareDate)) {
+            throw new AppError('Token expired')
+        }
 
-       await this.usersRepository.save(user)
+        user.password = await this.hashProvider.generateHash(password)
+
+        console.log(userToken);
+
+        await this.usersRepository.save(user)
     }
 }
 
