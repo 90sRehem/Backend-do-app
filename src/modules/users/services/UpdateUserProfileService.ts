@@ -4,7 +4,6 @@ import User from '../infra/typeorm/entities/User'
 import IUsersRepository from '@modules/users/repositories/IUsersRepository'
 import AppError from '@shared/errors/AppError'
 import IHashProvider from '../providers/HashProvider/models/IHashProvider'
-import usersRouter from '../infra/http/routes/users.routes'
 
 interface IRequest {
     user_id: string;
@@ -58,7 +57,6 @@ class UpdateProfile {
         }
 
         return this.usersRepository.save(user)
-
     }
 }
 
