@@ -1,15 +1,15 @@
 import AppError from '@shared/errors/AppError';
 
-import ListProvidersMonthAvailabilityService from './ListProviderMonthAvailabilityService'
 import FakeAppointmentsRepository from '../repositories/fakes/FakeAppointmentsRepository'
+import ListProvidersMonthAvailabilityService from './ListProviderMonthAvailabilityService'
 
-let listProviderMonthAvailability: ListProvidersMonthAvailabilityService;
 let fakeAppointmentsRepository: FakeAppointmentsRepository;
+let listProviderMonthAvailabilityService: ListProvidersMonthAvailabilityService;
 
 describe('ListProviderMonthAvailability', () => {
     beforeEach(() => {
         fakeAppointmentsRepository = new FakeAppointmentsRepository()
-        listProviderMonthAvailability = new ListProvidersMonthAvailabilityService(
+        listProviderMonthAvailabilityService = new ListProvidersMonthAvailabilityService(
             fakeAppointmentsRepository
         )
     })
@@ -35,19 +35,21 @@ describe('ListProviderMonthAvailability', () => {
             date: new Date(2020, 4, 21, 8, 0, 0),
         })
 
-        const availability = listProviderMonthAvailability.execute({
+        const availability = listProviderMonthAvailabilityService.execute({
             provider_id: 'some_id',
             year: 2020,
             month: 5,
         })
 
-        await expect(availability)
-            .toEqual(expect.arrayContaining([
+        expect(availability).toEqual(
+            expect.arrayContaining([
                 { day: 19, available: true },
                 { day: 20, available: false },
-                { day: 21, available: false },
+                { day: 21, available: true },
                 { day: 22, available: true },
-            ]))
+            ]),
+        );
     });
-})
+});
+
 
