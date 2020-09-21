@@ -6,9 +6,9 @@ let fakeAppointmentsRepository: FakeAppointmentsRepository;
 let createAppointment: CreateAppointmentService;
 
 describe('CreateAppointment', () => {
-    beforeEach(()=> {
-         fakeAppointmentsRepository = new FakeAppointmentsRepository()
-         createAppointment = new CreateAppointmentService(fakeAppointmentsRepository)
+    beforeEach(() => {
+        fakeAppointmentsRepository = new FakeAppointmentsRepository()
+        createAppointment = new CreateAppointmentService(fakeAppointmentsRepository)
     })
 
     it('should be able to create a new appointment', async () => {
@@ -17,6 +17,7 @@ describe('CreateAppointment', () => {
 
         const appointment = await createAppointment.execute({
             date: new Date(),
+            user_id: '123',
             provider_id: '123'
         })
         expect(appointment).toHaveProperty('id')
@@ -30,11 +31,13 @@ describe('CreateAppointment', () => {
         const appointmentDate = new Date(2020, 8, 9, 18)
         await createAppointment.execute({
             date: appointmentDate,
+            user_id: '123',
             provider_id: '123'
         })
 
-       await expect(createAppointment.execute({
+        await expect(createAppointment.execute({
             date: appointmentDate,
+            user_id: '123',
             provider_id: '123'
         })).rejects.toBeInstanceOf(AppError)
     })
