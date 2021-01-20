@@ -14,6 +14,7 @@ class DiskStorageProvider implements IStorageProvider {
       region: 'us-east-2'
     })
   }
+
   public async saveFile(file: string): Promise<string> {
     const originalPath = path.resolve(uploadConfig.tmpFolder, file)
 
